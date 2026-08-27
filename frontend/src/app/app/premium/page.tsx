@@ -1,9 +1,22 @@
 'use client';
 
+import {
+  Crown,
+  Heart,
+  Star,
+  Eye,
+  Zap,
+  SlidersHorizontal,
+  Sparkles,
+  RotateCcw,
+  Check,
+  Rocket,
+} from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, errMessage } from '@/lib/api';
-import { Button, EmptyState, PageHeader, Spinner } from '@/components/ui';
+import { Button, EmptyState, Spinner } from '@/components/ui';
 
 interface Plan {
   id: string;
@@ -19,14 +32,14 @@ interface Plan {
 }
 
 const FEATURES = [
-  { icon: '❤️', label: 'Unlimited likes' },
-  { icon: '🌟', label: 'Weekly Super Likes' },
-  { icon: '👀', label: 'See who liked you' },
-  { icon: '🚀', label: 'Profile boosts' },
-  { icon: '🎯', label: 'Advanced filters' },
-  { icon: '🔮', label: 'Compatibility insights' },
-  { icon: '↩️', label: 'Unlimited rewinds' },
-  { icon: '🎨', label: 'Premium profile themes' },
+  { icon: Heart, label: 'Unlimited likes', color: '#ff3d8f' },
+  { icon: Star, label: 'Weekly Super Likes', color: '#38bdf8' },
+  { icon: Eye, label: 'See who liked you', color: '#c92bb0' },
+  { icon: Zap, label: 'Profile boosts', color: '#a875ff' },
+  { icon: SlidersHorizontal, label: 'Advanced filters', color: '#3dd6ff' },
+  { icon: Sparkles, label: 'Compatibility insights', color: '#fbbf24' },
+  { icon: RotateCcw, label: 'Unlimited rewinds', color: '#34d399' },
+  { icon: Crown, label: 'Premium badge', color: '#fbbf24' },
 ];
 
 export default function PremiumPage() {
@@ -57,7 +70,7 @@ export default function PremiumPage() {
     setMsg('');
     try {
       await api.post('/premium/subscribe', { planId, payerPhone: phone || undefined });
-      setMsg('Welcome to Kokoro Premium! ✨');
+      setMsg('Welcome to Kokoro Premium!');
       load();
     } catch (e) {
       setError(errMessage(e));
@@ -70,7 +83,7 @@ export default function PremiumPage() {
     setSubscribing('boost');
     try {
       await api.post('/premium/boost', { payerPhone: phone || undefined });
-      setMsg('You are boosted for 30 minutes! 🚀');
+      setMsg('You are boosted for 30 minutes!');
       load();
     } catch (e) {
       setError(errMessage(e));
@@ -89,7 +102,13 @@ export default function PremiumPage() {
 
   return (
     <div className="pt-14 lg:pt-0 max-w-4xl mx-auto">
-      <PageHeader title="Kokoro Premium ⭐" subtitle="More chances. More control. More love." />
+      <div className="text-center mb-8">
+        <span className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-brand-gradient shadow-glow text-white mb-4">
+          <Crown size={30} />
+        </span>
+        <h1 className="font-display text-4xl font-bold">Kokoro Premium</h1>
+        <p className="text-white/55 mt-2">More chances. More control. More love.</p>
+      </div>
 
       {(msg || error) && (
         <div
@@ -104,8 +123,10 @@ export default function PremiumPage() {
       )}
 
       {ent?.isPremium && (
-        <div className="card p-6 mb-8 bg-brand-gradient-soft border-rose-400/30 flex flex-wrap items-center gap-4">
-          <span className="text-4xl">👑</span>
+        <div className="card p-6 mb-8 bg-brand-gradient-soft border-amber-400/30 flex flex-wrap items-center gap-4">
+          <span className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0">
+            <Crown size={24} />
+          </span>
           <div className="flex-1">
             <div className="font-display text-xl font-bold">You are Premium</div>
             <div className="text-sm text-white/60">
@@ -115,23 +136,30 @@ export default function PremiumPage() {
             </div>
           </div>
           <Button onClick={boost} disabled={subscribing === 'boost'}>
-            {subscribing === 'boost' ? <Spinner /> : '🚀 Boost me now'}
+            {subscribing === 'boost' ? <Spinner /> : (<><Rocket size={16} className="mr-1.5" /> Boost me now</>)}
           </Button>
         </div>
       )}
 
-      {/* Features */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-        {FEATURES.map((f) => (
-          <div key={f.label} className="card p-4 text-center text-sm">
-            <div className="text-2xl mb-2">{f.icon}</div>
-            {f.label}
-          </div>
-        ))}
+        {FEATURES.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div key={f.label} className="card p-4 text-center text-sm flex flex-col items-center gap-2.5">
+              <span
+                className="w-11 h-11 rounded-2xl flex items-center justify-center"
+                style={{ background: `${f.color}1f`, color: f.color }}
+              >
+                <Icon size={20} />
+              </span>
+              {f.label}
+            </div>
+          );
+        })}
       </div>
 
       {plans.length === 0 ? (
-        <EmptyState icon="⭐" title="Plans coming soon" />
+        <EmptyState icon={Crown} title="Plans coming soon" />
       ) : (
         <div className="grid sm:grid-cols-2 gap-6">
           {plans.map((plan, i) => (
@@ -159,11 +187,17 @@ export default function PremiumPage() {
                 </span>
               </div>
               <ul className="space-y-2.5 text-sm text-white/70 mb-6">
-                <li>✦ {plan.dailyLikeLimit >= 200 ? 'Unlimited' : plan.dailyLikeLimit} likes</li>
-                <li>✦ {plan.superLikesPerWeek} Super Likes / week</li>
-                <li>✦ {plan.seeWhoLikesYou ? 'See who liked you' : '—'}</li>
-                <li>✦ {plan.advancedFilters ? 'Advanced filters' : '—'}</li>
-                <li>✦ {plan.includesBoost ? 'Free monthly boost' : 'Boosts available'}</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-rose-400 shrink-0" /><span>{plan.dailyLikeLimit >= 200 ? 'Unlimited' : plan.dailyLikeLimit} likes</span></li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-rose-400 shrink-0" /><span>{plan.superLikesPerWeek} Super Likes / week</span></li>
+                <li className={`flex items-center gap-2 ${plan.seeWhoLikesYou ? '' : 'opacity-50'}`}>
+                  {plan.seeWhoLikesYou && <Check size={14} className="text-rose-400 shrink-0" />}
+                  <span>See who liked you</span>
+                </li>
+                <li className={`flex items-center gap-2 ${plan.advancedFilters ? '' : 'opacity-50'}`}>
+                  {plan.advancedFilters && <Check size={14} className="text-rose-400 shrink-0" />}
+                  <span>Advanced filters</span>
+                </li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-rose-400 shrink-0" /><span>{plan.includesBoost ? 'Free monthly boost' : 'Boosts available'}</span></li>
               </ul>
               <div className="mb-4">
                 <input

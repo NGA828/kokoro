@@ -4,15 +4,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { api, errMessage, mediaUrl } from '@/lib/api';
+import { Camera, Heart, Gem, Sprout, Sparkles, Globe, Lightbulb, ArrowRight } from 'lucide-react';
 import { Logo, Button, Spinner } from '@/components/ui';
 import type { Interest } from '@/lib/types';
 
 const INTENTIONS = [
-  { value: 'long_term', label: 'Long-term relationship', emoji: '💍' },
-  { value: 'serious', label: 'Serious dating', emoji: '❤️' },
-  { value: 'friendship', label: 'Friendship first', emoji: '🌱' },
-  { value: 'casual', label: 'Casual dating', emoji: '✨' },
-  { value: 'not_sure', label: 'Still exploring', emoji: '🌍' },
+  { value: 'long_term', label: 'Long-term relationship', icon: Gem },
+  { value: 'serious', label: 'Serious dating', icon: Heart },
+  { value: 'friendship', label: 'Friendship first', icon: Sprout },
+  { value: 'casual', label: 'Casual dating', icon: Sparkles },
+  { value: 'not_sure', label: 'Still exploring', icon: Globe },
 ];
 
 export default function OnboardingPage() {
@@ -236,8 +237,10 @@ export default function OnboardingPage() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="text-white/50 p-8">
-                          <div className="text-5xl mb-3">📷</div>
+                        <div className="text-white/50 p-8 flex flex-col items-center">
+                          <span className="w-16 h-16 rounded-2xl bg-brand-gradient-soft border border-rose-400/30 flex items-center justify-center mb-3 text-rose-300">
+                            <Camera size={28} />
+                          </span>
                           <div>Tap to upload a photo</div>
                           <div className="text-xs mt-1">JPG, PNG or WEBP</div>
                         </div>
@@ -296,7 +299,11 @@ export default function OnboardingPage() {
                               : 'bg-white/5 border-white/10 hover:border-white/25'
                           }`}
                         >
-                          <span className="text-xl">{i.emoji}</span>
+                          <span className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                            form.intention === i.value ? 'bg-brand-gradient text-white' : 'bg-white/8 text-rose-300'
+                          }`}>
+                            <i.icon size={17} />
+                          </span>
                           <span className="font-medium">{i.label}</span>
                         </button>
                       ))}
@@ -337,7 +344,6 @@ export default function OnboardingPage() {
                                   : 'bg-white/5 border-white/10 text-white/70 hover:border-white/30'
                               }`}
                             >
-                              <span>{i.emoji}</span>
                               {i.name}
                             </button>
                           );
@@ -418,7 +424,10 @@ export default function OnboardingPage() {
                     />
                   </div>
                   <div className="glass rounded-2xl p-4 text-sm text-white/60">
-                    💡 You can fine-tune all of this later in Settings.
+                    <span className="flex items-center gap-2">
+                      <Lightbulb size={15} className="text-amber-300 shrink-0" />
+                      You can fine-tune all of this later in Settings.
+                    </span>
                   </div>
                 </div>
               )}
@@ -443,7 +452,7 @@ export default function OnboardingPage() {
               </Button>
             ) : (
               <Button onClick={finish} disabled={loading || selected.length < 1}>
-                {loading ? <Spinner /> : 'Start discovering ❤️'}
+                {loading ? <Spinner /> : (<span className='inline-flex items-center gap-2'>Start discovering <Heart size={16} fill='currentColor' /></span>)}
               </Button>
             )}
           </div>

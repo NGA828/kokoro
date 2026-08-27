@@ -1,5 +1,7 @@
 'use client';
 
+import { BadgeCheck, Check } from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { Avatar, Button, EmptyState, PageHeader, Skeleton } from '@/components/ui';
@@ -32,11 +34,11 @@ export default function VerificationsPage() {
 
   return (
     <div>
-      <PageHeader title="Verifications ✅" subtitle="Approve trusted profiles." />
+      <PageHeader title="Verifications" subtitle="Approve trusted profiles." />
       {loading ? (
         <Skeleton className="h-64" />
       ) : items.length === 0 ? (
-        <EmptyState icon="✅" title="No pending requests" body="All caught up." />
+        <EmptyState icon={BadgeCheck} title="No pending requests" body="All caught up." />
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((p) => (
@@ -58,7 +60,7 @@ export default function VerificationsPage() {
                   className="flex-1 !py-2 text-sm"
                   onClick={() => decide(p.userId, 'verified')}
                 >
-                  ✓ Verify
+                  <Check size={15} className="inline mr-1 -mt-0.5" /> Verify
                 </Button>
               </div>
             </div>

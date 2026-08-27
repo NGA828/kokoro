@@ -1,5 +1,7 @@
 'use client';
 
+import { MapPin, BadgeCheck, Plus, Trash2 } from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { api, errMessage, mediaUrl } from '@/lib/api';
 import {
@@ -63,7 +65,7 @@ export default function ProfilePage() {
     try {
       const { data } = await api.patch('/profiles/me', form);
       setProfile(data);
-      setMsg('Profile saved ✨');
+      setMsg('Profile saved');
       setTimeout(() => setMsg(''), 2000);
     } catch (e) {
       setError(errMessage(e));
@@ -146,14 +148,15 @@ export default function ProfilePage() {
             </h2>
             {profile.isVerified && <VerifiedBadge />}
           </div>
-          <div className="text-white/60 text-sm mb-4">
-            📍 {profile.city}
+          <div className="text-white/60 text-sm mb-4 flex items-center gap-1.5">
+            <MapPin size={14} className="text-rose-300" />
+            {profile.city}
             {profile.country ? `, ${profile.country}` : ''}
           </div>
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge tone={profile.verification === 'verified' ? 'green' : profile.verification === 'pending' ? 'gold' : 'default'}>
               {profile.verification === 'verified'
-                ? '✓ Verified'
+                ? 'Verified'
                 : profile.verification === 'pending'
                   ? 'Verification pending'
                   : 'Not verified'}
@@ -161,8 +164,8 @@ export default function ProfilePage() {
             <Badge tone="brand">Profile {profile.completion}% complete</Badge>
           </div>
           {profile.verification !== 'verified' && profile.verification !== 'pending' && (
-            <Button variant="ghost" className="text-sm" onClick={requestVerification}>
-              ✅ Request verification
+            <Button variant="ghost" className="text-sm inline-flex items-center gap-2" onClick={requestVerification}>
+              <BadgeCheck size={16} /> Request verification
             </Button>
           )}
         </div>
@@ -181,14 +184,15 @@ export default function ProfilePage() {
                   const { data } = await api.get('/profiles/me');
                   setProfile(data);
                 }}
-                className="absolute top-1 right-1 w-7 h-7 rounded-full bg-ink-950/70 text-xs opacity-0 group-hover:opacity-100"
+                className="absolute top-1 right-1 w-7 h-7 rounded-full bg-ink-950/70 flex items-center justify-center text-white/80 hover:bg-red-500/80 opacity-0 group-hover:opacity-100 transition"
+                aria-label="Delete photo"
               >
-                🗑
+                <Trash2 size={13} />
               </button>
             </div>
           ))}
           <label className="aspect-[3/4] rounded-2xl border-2 border-dashed border-white/20 hover:border-rose-400/60 flex flex-col items-center justify-center cursor-pointer text-white/50 text-xs gap-1">
-            {uploading ? <Spinner /> : <>➕<span>Add photo</span></>}
+            {uploading ? <Spinner /> : <><Plus size={20} /><span>Add photo</span></>}
             <input type="file" accept="image/*" className="hidden" onChange={uploadPhoto} />
           </label>
         </div>
@@ -253,7 +257,7 @@ export default function ProfilePage() {
                     : 'bg-white/5 border-white/10 text-white/70 hover:border-white/30'
                 }`}
               >
-                {i.emoji} {i.name}
+                {i.name}
               </button>
             );
           })}

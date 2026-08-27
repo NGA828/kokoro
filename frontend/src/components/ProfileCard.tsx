@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Badge, Photo, VerifiedBadge } from '@/components/ui';
+import { Heart, MapPin, Star, Zap, Lock } from 'lucide-react';
+import { Photo, VerifiedBadge } from '@/components/ui';
 import type { ProfileCard as Card } from '@/lib/types';
 
 export function ProfileCard({
@@ -15,36 +16,39 @@ export function ProfileCard({
   onOpen?: () => void;
   showBlurred?: boolean;
 }) {
+  const blurred = showBlurred && card.blurred;
   return (
     <motion.div
       {...(dragHandlers ?? {})}
-      className="absolute inset-0 rounded-4xl overflow-hidden shadow-card select-none"
+      className="absolute inset-0 rounded-[28px] overflow-hidden shadow-card select-none bg-ink-800"
       style={{ touchAction: 'none' }}
     >
-      <Photo src={card.mainPhotoUrl} alt={card.name} blur={showBlurred && card.blurred} />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink-950/95 via-ink-950/20 to-transparent" />
+      <Photo src={card.mainPhotoUrl} alt={card.name} blur={blurred} />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink-950/95 via-ink-950/15 to-ink-950/25" />
 
       {/* Top badges */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
         <div className="flex flex-wrap gap-2">
           {card.compatibility != null && (
-            <Badge tone="brand" className="backdrop-blur">
-              💘 {card.compatibility}% Match
-            </Badge>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/90 text-white text-xs font-bold px-3 py-1.5 backdrop-blur shadow-glow">
+              <Heart size={12} fill="currentColor" /> {card.compatibility}% Match
+            </span>
           )}
           {card.isSuperLike && (
-            <Badge tone="gold" className="backdrop-blur">
-              🌟 Super Like
-            </Badge>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-500/90 text-white text-xs font-bold px-3 py-1.5 backdrop-blur">
+              <Star size={12} fill="currentColor" /> Super Like
+            </span>
           )}
           {card.isBoosted && (
-            <Badge tone="purple" className="backdrop-blur bg-violet2-500/30 border-violet2-400/40 text-violet2-300">
-              🚀 Boosted
-            </Badge>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-violet2-500/90 text-white text-xs font-bold px-3 py-1.5 backdrop-blur">
+              <Zap size={12} fill="currentColor" /> Boosted
+            </span>
           )}
         </div>
         {card.distanceKm != null && (
-          <Badge tone="blur">📍 {card.distanceKm} km</Badge>
+          <span className="inline-flex items-center gap-1 rounded-full bg-ink-900/60 text-white/90 text-xs font-medium px-3 py-1.5 backdrop-blur border border-white/10">
+            <MapPin size={12} /> {card.distanceKm} km
+          </span>
         )}
       </div>
 
@@ -56,54 +60,50 @@ export function ProfileCard({
           aria-label={`View ${card.name}'s profile`}
         >
           <div className="flex items-end gap-2">
-            <h2 className="font-display text-3xl font-bold">
-              {showBlurred && card.blurred ? '???' : card.name}
-              {card.age != null && !card.blurred && (
-                <span className="text-white/80 font-sans font-normal text-2xl">
-                  {' '}
+            <h2 className="font-display text-[28px] leading-tight font-bold drop-shadow">
+              {blurred ? '???' : card.name}
+              {card.age != null && !blurred && (
+                <span className="text-white/85 font-sans font-normal text-2xl ml-1.5">
                   {card.age}
                 </span>
               )}
             </h2>
-            {card.isVerified && <VerifiedBadge className="mb-2" />}
+            {card.isVerified && !blurred && <VerifiedBadge className="mb-1.5" />}
           </div>
-          <div className="text-white/70 text-sm mt-0.5">
+          <div className="text-white/80 text-sm mt-1 flex items-center gap-1.5">
+            <MapPin size={13} className="text-rose-300" />
             {card.city}
-            {card.intentionLabel && !card.blurred && (
-              <>
-                {' · '}
-                <span className="text-rose-300">{card.intentionLabel}</span>
-              </>
-            )}
+            {card.country ? `, ${card.country}` : ''}
           </div>
 
-          {!card.blurred && (
-            <p className="text-white/70 text-sm mt-2 line-clamp-2">
+          {!blurred && card.bio && (
+            <p className="text-white/75 text-sm mt-2 line-clamp-2 leading-relaxed">
               {card.bio}
             </p>
           )}
 
-          {!card.blurred && card.interests.length > 0 && (
+          {!blurred && card.interests.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {card.interests.slice(0, 5).map((i) => (
+              {card.interests.slice(0, 4).map((i) => (
                 <span
                   key={i.id}
-                  className="chip bg-white/10 border-white/15 text-xs backdrop-blur"
+                  className="rounded-full bg-white/12 border border-white/20 text-xs font-medium text-white/95 px-3 py-1 backdrop-blur"
                 >
-                  {i.emoji} {i.name}
+                  {i.name}
                 </span>
               ))}
-              {card.interests.length > 5 && (
-                <span className="chip bg-white/10 border-white/15 text-xs">
-                  +{card.interests.length - 5}
+              {card.interests.length > 4 && (
+                <span className="rounded-full bg-white/12 border border-white/20 text-xs px-3 py-1 backdrop-blur">
+                  +{card.interests.length - 4}
                 </span>
               )}
             </div>
           )}
 
-          {card.blurred && (
-            <div className="mt-3 text-sm text-white/60">
-              🔒 Upgrade to Premium to see who liked you
+          {blurred && (
+            <div className="mt-3 inline-flex items-center gap-2 text-sm text-white/70 bg-ink-900/70 border border-white/15 rounded-full px-3 py-1.5 backdrop-blur">
+              <Lock size={13} className="text-amber-300" />
+              Premium to see who liked you
             </div>
           )}
         </button>

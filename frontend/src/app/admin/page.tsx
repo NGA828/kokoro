@@ -14,6 +14,8 @@ import {
   YAxis,
 } from 'recharts';
 import { api } from '@/lib/api';
+import type { LucideIcon } from 'lucide-react';
+import { Users, Activity, UserPlus, HeartHandshake, MessageCircle, Crown, ShieldAlert, Banknote } from 'lucide-react';
 import { PageHeader, Skeleton } from '@/components/ui';
 
 interface Stats {
@@ -46,15 +48,15 @@ export default function AdminOverview() {
     );
   }
 
-  const cards: { label: string; value: number; icon: string }[] = [
-    { label: 'Total users', value: stats.cards.totalUsers, icon: '👥' },
-    { label: 'Active (7d)', value: stats.cards.activeUsers, icon: '🟢' },
-    { label: 'New (30d)', value: stats.cards.newUsers30, icon: '✨' },
-    { label: 'Matches', value: stats.cards.totalMatches, icon: '💞' },
-    { label: 'Messages', value: stats.cards.totalMessages, icon: '💬' },
-    { label: 'Premium users', value: stats.cards.premiumUsers, icon: '⭐' },
-    { label: 'Open reports', value: stats.cards.openReports, icon: '🚨' },
-    { label: 'Revenue', value: stats.cards.revenue, icon: '💰' },
+  const cards: { label: string; value: number; icon: LucideIcon; color: string }[] = [
+    { label: 'Total users', value: stats.cards.totalUsers, icon: Users, color: '#ff3d8f' },
+    { label: 'Active (7d)', value: stats.cards.activeUsers, icon: Activity, color: '#34d399' },
+    { label: 'New (30d)', value: stats.cards.newUsers30, icon: UserPlus, color: '#3dd6ff' },
+    { label: 'Matches', value: stats.cards.totalMatches, icon: HeartHandshake, color: '#c92bb0' },
+    { label: 'Messages', value: stats.cards.totalMessages, icon: MessageCircle, color: '#8b4dff' },
+    { label: 'Premium users', value: stats.cards.premiumUsers, icon: Crown, color: '#fbbf24' },
+    { label: 'Open reports', value: stats.cards.openReports, icon: ShieldAlert, color: '#f87171' },
+    { label: 'Revenue', value: stats.cards.revenue, icon: Banknote, color: '#34d399' },
   ];
 
   return (
@@ -64,7 +66,9 @@ export default function AdminOverview() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {cards.map((c) => (
           <div key={c.label} className="card p-5">
-            <div className="text-2xl mb-2">{c.icon}</div>
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center mb-3" style={{ background: `${c.color}1f`, color: c.color }}>
+              <c.icon size={19} />
+            </div>
             <div className="font-display text-2xl font-bold">
               {c.value.toLocaleString()}
             </div>

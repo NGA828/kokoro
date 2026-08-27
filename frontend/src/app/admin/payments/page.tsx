@@ -1,5 +1,7 @@
 'use client';
 
+import { CreditCard } from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { Badge, EmptyState, PageHeader, Skeleton } from '@/components/ui';
@@ -33,13 +35,13 @@ export default function PaymentsPage() {
   return (
     <div>
       <PageHeader
-        title="Payments 💳"
+        title="Payments"
         subtitle={`Processed revenue: ${revenue.toLocaleString()} XAF`}
       />
       {loading ? (
         <Skeleton className="h-64" />
       ) : payments.length === 0 ? (
-        <EmptyState icon="💳" title="No payments yet" />
+        <EmptyState icon={CreditCard} title="No payments yet" />
       ) : (
         <div className="card divide-y divide-white/5 overflow-x-auto">
           <table className="w-full text-sm min-w-[600px]">

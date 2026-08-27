@@ -1,5 +1,7 @@
 'use client';
 
+import { KeyRound } from 'lucide-react';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { api, errMessage } from '@/lib/api';
@@ -57,7 +59,9 @@ export default function ForgotPasswordPage() {
           <h1 className="font-display text-3xl font-bold mb-2">Reset password</h1>
           {done ? (
             <div className="text-center py-6">
-              <div className="text-5xl mb-4">🔑</div>
+              <div className="mb-4 inline-flex w-20 h-20 rounded-[24px] bg-brand-gradient shadow-glow items-center justify-center">
+                <KeyRound size={36} className="text-white" />
+              </div>
               <p className="text-white/70 mb-6">
                 Your password has been reset. You can now log in with your new
                 password.

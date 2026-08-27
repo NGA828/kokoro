@@ -3,7 +3,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { BadgeCheck } from 'lucide-react';
 import { mediaUrl } from '@/lib/api';
+
+export function HeartMark({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M12 21s-7.5-4.6-10-9.2C.4 8.7 1.9 5 5.3 5c2 0 3.4 1.1 4.2 2.4h.2C10.5 6.1 11.9 5 13.9 5c3.4 0 4.9 3.7 3.3 6.8C19.6 16.4 12 21 12 21z" />
+    </svg>
+  );
+}
 
 export function Logo({
   size = 'md',
@@ -12,19 +21,21 @@ export function Logo({
   size?: 'sm' | 'md' | 'lg';
   href?: string;
 }) {
-  const dims =
-    size === 'sm' ? 'w-8 h-8 text-lg' : size === 'lg' ? 'w-12 h-12 text-2xl' : 'w-10 h-10 text-xl';
+  const box =
+    size === 'sm' ? 'w-9 h-9 rounded-xl' : size === 'lg' ? 'w-13 h-13 rounded-2xl' : 'w-11 h-11 rounded-2xl';
+  const heart =
+    size === 'sm' ? 'w-4.5 h-4.5' : size === 'lg' ? 'w-7 h-7' : 'w-6 h-6';
   const text =
     size === 'sm' ? 'text-lg' : size === 'lg' ? 'text-2xl' : 'text-xl';
   const mark = (
     <span className="flex items-center gap-2.5 font-display">
       <span
-        className={`${dims} rounded-2xl bg-brand-gradient flex items-center justify-center shadow-glow text-white`}
+        className={`${box} bg-brand-gradient flex items-center justify-center shadow-glow text-white`}
       >
-        心
+        <HeartMark className={heart} />
       </span>
-      <span className={`${text} font-bold tracking-tight`}>
-        Kokoro <span className="text-gradient">March</span>
+      <span className={`${text} font-bold tracking-tight leading-none`}>
+        Kokoro <span className="text-gradient italic font-semibold">March</span>
       </span>
     </span>
   );
@@ -50,6 +61,35 @@ export function Button({
           : 'btn-ghost';
   return (
     <button className={`${cls} ${className}`} {...props}>
+      {children}
+    </button>
+  );
+}
+
+export function IconButton({
+  children,
+  className = '',
+  tone = 'default',
+  size = 48,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  tone?: 'default' | 'pink' | 'rose' | 'blue' | 'purple' | 'gold';
+  size?: number;
+}) {
+  const tones: Record<string, string> = {
+    default: 'bg-white/10 text-white hover:bg-white/20 border border-white/15',
+    pink: 'bg-white text-rose-500 hover:bg-rose-50 shadow-glow',
+    rose: 'bg-rose-500 text-white hover:bg-rose-600 shadow-glow',
+    blue: 'bg-white text-sky-500 hover:bg-sky-50',
+    purple: 'bg-white text-violet2-500 hover:bg-violet2-50 shadow-glow-violet',
+    gold: 'bg-white text-amber-500 hover:bg-amber-50',
+  };
+  return (
+    <button
+      style={{ width: size, height: size }}
+      className={`rounded-full flex items-center justify-center transition-all duration-200 active:scale-90 disabled:opacity-40 disabled:pointer-events-none backdrop-blur ${tones[tone]} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );
@@ -160,33 +200,42 @@ export function VerifiedBadge({ className = '' }: { className?: string }) {
   return (
     <span
       title="Verified profile"
-      className={`inline-flex items-center justify-center w-5 h-5 rounded-full bg-sky-400 text-white text-[11px] ${className}`}
+      className={`inline-flex items-center justify-center rounded-full text-sky-400 ${className}`}
     >
-      ✓
+      <BadgeCheck className="w-5 h-5" fill="rgba(56,189,248,0.15)" />
     </span>
   );
 }
 
 export function EmptyState({
-  icon = '💫',
+  icon: IconCmp,
   title,
   body,
   action,
 }: {
-  icon?: string;
+  icon?: React.ComponentType<{ className?: string }>;
   title: string;
   body?: string;
   action?: React.ReactNode;
 }) {
+  const Icon = IconCmp ?? HeartMark;
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="card p-10 text-center flex flex-col items-center gap-3"
+      className="card p-10 text-center flex flex-col items-center gap-4"
     >
-      <div className="text-5xl">{icon}</div>
+      <div className="relative">
+        <span
+          className="absolute inset-0 rounded-full blur-xl opacity-60"
+          style={{ background: 'radial-gradient(circle, rgba(255,61,143,0.4), transparent 70%)' }}
+        />
+        <div className="relative w-20 h-20 rounded-full bg-brand-gradient-soft border border-rose-400/20 flex items-center justify-center">
+          <Icon className="w-9 h-9 text-rose-300" />
+        </div>
+      </div>
       <h3 className="font-display text-xl">{title}</h3>
-      {body && <p className="text-white/60 max-w-md">{body}</p>}
+      {body && <p className="text-white/60 max-w-md leading-relaxed">{body}</p>}
       {action && <div className="mt-2">{action}</div>}
     </motion.div>
   );

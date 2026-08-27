@@ -48,7 +48,7 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <PageHeader title="Users 👥" subtitle={`${total} accounts`} />
+      <PageHeader title="Users " subtitle={`${total} accounts`} />
       <input
         className="input mb-5 max-w-sm"
         placeholder="Search by name or email…"

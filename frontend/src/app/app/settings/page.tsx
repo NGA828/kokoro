@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Settings as SettingsIcon, LogOut, ShieldCheck, SlidersHorizontal, UserCog } from 'lucide-react';
 import { api, errMessage } from '@/lib/api';
 import { useAuth } from '@/lib/store';
-import { Button, PageHeader, Spinner } from '@/components/ui';
+import { Button, Spinner } from '@/components/ui';
 
 const TOGGLES: { key: string; label: string }[] = [
   { key: 'showOnlineStatus', label: 'Show my online status' },
@@ -79,7 +80,9 @@ export default function SettingsPage() {
 
   return (
     <div className="pt-14 lg:pt-0 max-w-2xl mx-auto space-y-6">
-      <PageHeader title="Settings ⚙️" subtitle="Manage your account, privacy and security." />
+      <h1 className="font-display text-3xl font-bold flex items-center gap-2.5">
+        <SettingsIcon size={26} className="text-rose-300" /> Settings
+      </h1>
 
       {(msg || error) && (
         <div
@@ -95,7 +98,7 @@ export default function SettingsPage() {
 
       {/* Discovery preference */}
       <section className="card p-6">
-        <h3 className="font-semibold mb-4">Privacy</h3>
+        <h3 className="font-semibold mb-4 flex items-center gap-2"><ShieldCheck size={17} className="text-rose-300" /> Privacy</h3>
         <div className="flex items-center justify-between py-3 border-b border-white/5">
           <div>
             <div className="font-medium">Profile visibility</div>
@@ -130,7 +133,7 @@ export default function SettingsPage() {
 
       {/* Discovery preferences shortcut */}
       <section className="card p-6">
-        <h3 className="font-semibold mb-2">Discovery preferences</h3>
+        <h3 className="font-semibold mb-2 flex items-center gap-2"><SlidersHorizontal size={17} className="text-rose-300" /> Discovery preferences</h3>
         <p className="text-sm text-white/50 mb-4">
           Fine-tune who you see — gender, age range and distance.
         </p>
@@ -141,7 +144,7 @@ export default function SettingsPage() {
 
       {/* Security */}
       <section className="card p-6">
-        <h3 className="font-semibold mb-4">Security</h3>
+        <h3 className="font-semibold mb-4 flex items-center gap-2"><ShieldCheck size={17} className="text-rose-300" /> Security</h3>
         <form onSubmit={changePassword} className="space-y-3">
           <div>
             <label className="label">Current password</label>
@@ -170,7 +173,7 @@ export default function SettingsPage() {
 
       {/* Account */}
       <section className="card p-6">
-        <h3 className="font-semibold mb-2">Account</h3>
+        <h3 className="font-semibold mb-2 flex items-center gap-2"><UserCog size={17} className="text-rose-300" /> Account</h3>
         <p className="text-sm text-white/50 mb-4">
           Signed in as <b className="text-white/80">{user?.email}</b>
         </p>
@@ -182,7 +185,7 @@ export default function SettingsPage() {
               router.push('/login');
             }}
           >
-            🚪 Log out
+<LogOut size={16} /> Log out
           </Button>
           <Button variant="ghost" onClick={deactivate}>
             Deactivate account

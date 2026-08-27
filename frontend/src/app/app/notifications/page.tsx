@@ -1,23 +1,35 @@
 'use client';
 
+import type { LucideIcon } from 'lucide-react';
+import {
+  Bell,
+  Users,
+  MessageCircle,
+  Heart,
+  Star,
+  Eye,
+  Crown,
+  BadgeCheck,
+  CheckCheck,
+} from 'lucide-react';
+
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { useSocket } from '@/lib/socket';
-import { Button, EmptyState, PageHeader, Skeleton } from '@/components/ui';
+import { Button, EmptyState, Skeleton } from '@/components/ui';
 import type { AppNotification } from '@/lib/types';
 
-const ICONS: Record<string, string> = {
-  match: '💞',
-  message: '💬',
-  like: '❤️',
-  superlike: '🌟',
-  profile_view: '👀',
-  system: '🔔',
-  premium: '⭐',
-  verification: '✅',
+const ICONS: Record<string, { C: LucideIcon; color: string; bg: string }> = {
+  match: { C: Users, color: '#ff3d8f', bg: 'rgba(255,61,143,0.15)' },
+  message: { C: MessageCircle, color: '#8b4dff', bg: 'rgba(139,77,255,0.15)' },
+  like: { C: Heart, color: '#ff3d8f', bg: 'rgba(255,61,143,0.15)' },
+  superlike: { C: Star, color: '#38bdf8', bg: 'rgba(56,189,248,0.15)' },
+  profile_view: { C: Eye, color: '#3dd6ff', bg: 'rgba(61,214,255,0.15)' },
+  system: { C: Bell, color: '#a875ff', bg: 'rgba(168,117,255,0.15)' },
+  premium: { C: Crown, color: '#fbbf24', bg: 'rgba(251,191,36,0.15)' },
+  verification: { C: BadgeCheck, color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
 };
 
 function timeAgo(iso: string) {
@@ -64,20 +76,18 @@ export default function NotificationsPage() {
 
   return (
     <div className="pt-14 lg:pt-0 max-w-2xl mx-auto">
-      <PageHeader
-        title="Notifications 🔔"
-        action={
-          <Button
-            variant="ghost"
-            className="!py-2 text-sm"
-            onClick={() => {
-              api.post('/notifications/read-all').then(() => load());
-            }}
-          >
-            Mark all read
-          </Button>
-        }
-      />
+      <div className="flex items-end justify-between mb-6">
+        <h1 className="font-display text-3xl font-bold">Notifications</h1>
+        <Button
+          variant="ghost"
+          className="!py-2 text-sm inline-flex items-center gap-1.5"
+          onClick={() => {
+            api.post('/notifications/read-all').then(() => load());
+          }}
+        >
+          <CheckCheck size={15} /> Mark all read
+        </Button>
+      </div>
 
       {loading ? (
         <div className="space-y-3">
@@ -87,7 +97,7 @@ export default function NotificationsPage() {
         </div>
       ) : items.length === 0 ? (
         <EmptyState
-          icon="🔔"
+          icon={Bell}
           title="No notifications yet"
           body="When something exciting happens — a match, a like, a message — you will find it here."
         />
@@ -104,7 +114,18 @@ export default function NotificationsPage() {
                 n.isRead ? 'bg-white/[0.03]' : 'bg-brand-gradient-soft border border-rose-400/20'
               } hover:bg-white/[0.07]`}
             >
-              <span className="text-2xl shrink-0">{ICONS[n.type] ?? '🔔'}</span>
+              <span
+                className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                style={{
+                  background: (ICONS[n.type] ?? ICONS.system).bg,
+                  color: (ICONS[n.type] ?? ICONS.system).color,
+                }}
+              >
+                {(() => {
+                  const C = (ICONS[n.type] ?? ICONS.system).C;
+                  return <C size={20} />;
+                })()}
+              </span>
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-sm">{n.title}</div>
                 {n.body && <div className="text-sm text-white/60 truncate">{n.body}</div>}

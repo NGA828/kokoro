@@ -2,33 +2,42 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Plus,
+  Sparkles,
+  Users,
+  MessageCircle,
+  Target,
+  Flower2,
+  ShieldCheck,
+  Crown,
+  Globe,
+  Heart,
+  BadgeCheck,
+  Check,
+  Ban,
+  Flag,
+  Lock,
+  Star,
+  Quote,
+} from 'lucide-react';
 import { Logo } from '@/components/ui';
 
 const steps = [
-  {
-    icon: '✨',
-    title: 'Create your profile',
-    body: 'Tell us about you — your interests, what you are looking for, and the moments you want to share.',
-  },
-  {
-    icon: '💞',
-    title: 'Discover compatible people',
-    body: 'Meet real people near you through a transparent compatibility score based on interests, goals and preferences.',
-  },
-  {
-    icon: '💬',
-    title: 'Match & connect',
-    body: 'When the feeling is mutual, it is a match. Chat in real time and turn a spark into something lasting.',
-  },
+  { icon: Sparkles, title: 'Create your profile',
+    body: 'Tell us about you — your interests, what you are looking for, and the moments you want to share.' },
+  { icon: Users, title: 'Discover compatible people',
+    body: 'Meet real people near you through a transparent compatibility score based on interests, goals and preferences.' },
+  { icon: MessageCircle, title: 'Match & connect',
+    body: 'When the feeling is mutual, it is a match. Chat in real time and turn a spark into something lasting.' },
 ];
 
 const features = [
-  { icon: '🎯', title: 'Meaningful compatibility', body: 'See exactly why you match — shared interests, relationship goals, location and more.' },
-  { icon: '💬', title: 'Real-time chat', body: 'Instant messaging, typing indicators, read receipts, photo and voice notes.' },
-  { icon: '🌸', title: 'Personality first', body: 'From afrobeats to anime — express what makes you, you.' },
-  { icon: '🛡️', title: 'Safety by design', body: 'Block, report, verified profiles and full privacy controls in your hands.' },
-  { icon: '⭐', title: 'Premium powers', body: 'See who liked you, unlimited likes, super likes, boosts and advanced filters.' },
-  { icon: '🌍', title: 'Made for Africa', body: 'Built around African cities, culture and mobile-money ready payments.' },
+  { icon: Target, title: 'Meaningful compatibility', body: 'See exactly why you match — shared interests, relationship goals, location and more.' },
+  { icon: MessageCircle, title: 'Real-time chat', body: 'Instant messaging, typing indicators, read receipts, photo and voice notes.' },
+  { icon: Flower2, title: 'Personality first', body: 'From afrobeats to anime — express what makes you, you.' },
+  { icon: ShieldCheck, title: 'Safety by design', body: 'Block, report, verified profiles and full privacy controls in your hands.' },
+  { icon: Crown, title: 'Premium powers', body: 'See who liked you, unlimited likes, super likes, boosts and advanced filters.' },
+  { icon: Globe, title: 'Made for Africa', body: 'Built around African cities, culture and mobile-money ready payments.' },
 ];
 
 const faqs = [
@@ -98,7 +107,7 @@ export default function LandingPage() {
             transition={{ duration: 0.7 }}
           >
             <span className="chip bg-brand-gradient-soft border-rose-400/30 text-rose-200 mb-6">
-              ❤️ African connections, meaningful love
+              African connections, meaningful love
             </span>
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6">
               Find love.<br />
@@ -118,10 +127,10 @@ export default function LandingPage() {
                 I already have an account
               </Link>
             </div>
-            <div className="flex items-center gap-6 mt-10 text-sm text-white/50">
-              <span>💞 Compatibility-based</span>
-              <span>🛡️ Safe & verified</span>
-              <span>🌍 18+ across Africa</span>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 text-sm text-white/50">
+              <span className="inline-flex items-center gap-1.5"><Heart size={14} className="text-rose-400" fill="currentColor" /> Compatibility-based</span>
+              <span className="inline-flex items-center gap-1.5"><ShieldCheck size={14} className="text-emerald-400" /> Safe & verified</span>
+              <span className="inline-flex items-center gap-1.5"><Globe size={14} className="text-sky-400" /> 18+ across Africa</span>
             </div>
           </motion.div>
 
@@ -146,7 +155,9 @@ export default function LandingPage() {
               transition={{ duration: 5, repeat: Infinity }}
               className="absolute -left-4 sm:-left-10 top-10 glass rounded-2xl px-4 py-3 flex items-center gap-3"
             >
-              <span className="text-2xl">💖</span>
+              <span className="w-9 h-9 rounded-full bg-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                <Heart size={17} fill="currentColor" />
+              </span>
               <div>
                 <div className="font-semibold text-sm">93% Match</div>
                 <div className="text-xs text-white/60">Shared: afrobeats, travel</div>
@@ -157,12 +168,12 @@ export default function LandingPage() {
               transition={{ duration: 6, repeat: Infinity }}
               className="absolute -right-2 sm:-right-8 bottom-16 glass rounded-2xl px-4 py-3 flex items-center gap-3"
             >
-              <span className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                ✓
+              <span className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <BadgeCheck size={17} />
               </span>
               <div>
                 <div className="font-semibold text-sm">New message</div>
-                <div className="text-xs text-white/60">“Hi! I loved your profile 😊”</div>
+                <div className="text-xs text-white/60">“Hi! I loved your profile”</div>
               </div>
             </motion.div>
           </motion.div>
@@ -187,8 +198,8 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.12 }}
                 className="card p-8"
               >
-                <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center text-2xl mb-5 shadow-glow">
-                  {s.icon}
+                <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center mb-5 shadow-glow text-white">
+                  <s.icon size={26} />
                 </div>
                 <div className="text-sm text-rose-300 font-semibold mb-1">
                   Step {i + 1}
@@ -219,7 +230,9 @@ export default function LandingPage() {
                 transition={{ delay: (i % 3) * 0.1 }}
                 className="card p-7 hover:border-rose-400/30 transition-colors"
               >
-                <div className="text-3xl mb-4">{f.icon}</div>
+                <div className="w-12 h-12 rounded-2xl bg-brand-gradient-soft border border-rose-400/20 flex items-center justify-center mb-4 text-rose-300">
+                  <f.icon size={22} />
+                </div>
                 <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
                 <p className="text-white/60 text-sm leading-relaxed">{f.body}</p>
               </motion.div>
@@ -236,7 +249,7 @@ export default function LandingPage() {
             <div className="relative grid md:grid-cols-2 gap-10 items-center">
               <div>
                 <span className="chip bg-emerald-500/15 border-emerald-400/30 text-emerald-300 mb-4">
-                  🛡️ Safety first
+                  Safety first
                 </span>
                 <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
                   Your safety is non-negotiable
@@ -254,19 +267,25 @@ export default function LandingPage() {
                     'Control your visibility, distance and online status',
                   ].map((t) => (
                     <li key={t} className="flex gap-3">
-                      <span className="text-emerald-400">✓</span>
+                      <Check size={17} className="text-emerald-400 shrink-0 mt-0.5" />
                       <span className="text-sm">{t}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                {['🚫 Block', '🚨 Report', '✅ Verified', '🔒 Privacy'].map((x) => (
+                {[
+                  { icon: Ban, label: 'Block', color: '#f87171' },
+                  { icon: Flag, label: 'Report', color: '#fbbf24' },
+                  { icon: BadgeCheck, label: 'Verified', color: '#38bdf8' },
+                  { icon: Lock, label: 'Privacy', color: '#a875ff' },
+                ].map((x) => (
                   <div
-                    key={x}
-                    className="aspect-square rounded-3xl glass flex items-center justify-center text-center text-lg font-semibold p-4"
+                    key={x.label}
+                    className="aspect-square rounded-3xl glass flex flex-col items-center justify-center gap-2 text-center text-lg font-semibold p-4"
                   >
-                    {x}
+                    <x.icon size={30} style={{ color: x.color }} />
+                    {x.label}
                   </div>
                 ))}
               </div>
@@ -288,10 +307,9 @@ export default function LandingPage() {
               <h3 className="font-display text-2xl mb-1">Free</h3>
               <p className="text-white/50 mb-6">Everything you need to meet someone</p>
               <ul className="space-y-3 text-sm text-white/70">
-                <li>✦ Discovery & compatibility scores</li>
-                <li>✦ 10 likes per day</li>
-                <li>✦ Real-time matches & chat</li>
-                <li>✦ Block, report & privacy controls</li>
+                {['Discovery & compatibility scores','10 likes per day','Real-time matches & chat','Block, report & privacy controls'].map((x) => (
+                  <li key={x} className="flex items-center gap-2"><Check size={14} className="text-emerald-400 shrink-0" />{x}</li>
+                ))}
               </ul>
             </div>
             <div className="card p-8 border-rose-400/40 relative bg-brand-gradient-soft">
@@ -301,11 +319,9 @@ export default function LandingPage() {
               <h3 className="font-display text-2xl mb-1 text-gradient">Premium</h3>
               <p className="text-white/50 mb-6">For those ready for more</p>
               <ul className="space-y-3 text-sm text-white/80">
-                <li>✦ Unlimited likes & weekly Super Likes</li>
-                <li>✦ See who liked you</li>
-                <li>✦ Profile boosts & advanced filters</li>
-                <li>✦ Advanced compatibility insights</li>
-                <li>✦ Undo swipes & profile themes</li>
+                {['Unlimited likes & weekly Super Likes','See who liked you','Profile boosts & advanced filters','Advanced compatibility insights','Undo swipes & profile themes'].map((x) => (
+                  <li key={x} className="flex items-center gap-2"><Check size={14} className="text-rose-400 shrink-0" />{x}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -319,7 +335,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6 mt-14">
             {testimonials.map((t) => (
               <div key={t.name} className="card p-8">
-                <div className="text-rose-400 text-2xl mb-4">❤️</div>
+                <Quote size={28} className="text-rose-400 mb-4" fill="currentColor" />
                 <p className="text-white/80 leading-relaxed italic mb-6">
                   “{t.body}”
                 </p>
@@ -343,9 +359,7 @@ export default function LandingPage() {
               >
                 <summary className="font-semibold cursor-pointer list-none flex justify-between items-center">
                   {f.q}
-                  <span className="text-rose-400 group-open:rotate-45 transition-transform text-xl">
-                    +
-                  </span>
+                  <Plus size={20} className="text-rose-400 transition-transform group-open:rotate-45" />
                 </summary>
                 <p className="text-white/60 mt-3 leading-relaxed">{f.a}</p>
               </details>
@@ -404,7 +418,7 @@ export default function LandingPage() {
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-10 text-xs text-white/30 flex justify-between">
           <span>© {new Date().getFullYear()} Kokoro March. 18+ only.</span>
-          <span>Made with ❤️ in Africa</span>
+          <span className="inline-flex items-center gap-1.5">Made with <Heart size={11} className="text-rose-400" fill="currentColor" /> in Africa</span>
         </div>
       </footer>
     </div>

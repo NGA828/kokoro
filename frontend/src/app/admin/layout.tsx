@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BarChart3, Users, ShieldAlert, BadgeCheck, CreditCard, ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/ui';
 
 const ADMIN_NAV = [
-  { href: '/admin', label: 'Overview', icon: '📊' },
-  { href: '/admin/users', label: 'Users', icon: '👥' },
-  { href: '/admin/reports', label: 'Reports', icon: '🚨' },
-  { href: '/admin/verifications', label: 'Verifications', icon: '✅' },
-  { href: '/admin/payments', label: 'Payments', icon: '💳' },
+  { href: '/admin', label: 'Overview', icon: BarChart3 },
+  { href: '/admin/users', label: 'Users', icon: Users },
+  { href: '/admin/reports', label: 'Reports', icon: ShieldAlert },
+  { href: '/admin/verifications', label: 'Verifications', icon: BadgeCheck },
+  { href: '/admin/payments', label: 'Payments', icon: CreditCard },
 ];
 
 export default function AdminLayout({
@@ -23,8 +24,8 @@ export default function AdminLayout({
       <aside className="hidden lg:flex flex-col border-r border-white/10 bg-ink-900/60 sticky top-0 h-screen p-5">
         <div className="px-2 py-2 mb-6">
           <Logo href="/admin" size="sm" />
-          <div className="text-xs text-amber-300 mt-1 font-semibold">
-            🛡️ Admin console
+          <div className="text-xs text-amber-300 mt-1 font-semibold flex items-center gap-1.5">
+            <ShieldCheck size={13} /> Admin console
           </div>
         </div>
         <nav className="space-y-1 flex-1">
@@ -38,7 +39,7 @@ export default function AdminLayout({
                   : 'text-white/70 hover:bg-white/5'
               }`}
             >
-              <span>{n.icon}</span>
+              <n.icon size={18} />
               {n.label}
             </Link>
           ))}
@@ -67,7 +68,7 @@ export default function AdminLayout({
                 pathname === n.href ? 'text-rose-400' : 'text-white/50'
               }`}
             >
-              <span className="text-lg">{n.icon}</span>
+              <n.icon size={19} />
               {n.label}
             </Link>
           ))}

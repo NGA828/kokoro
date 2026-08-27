@@ -1,5 +1,7 @@
 'use client';
 
+import { ShieldCheck } from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { Avatar, Badge, Button, EmptyState, PageHeader, Skeleton } from '@/components/ui';
@@ -34,11 +36,11 @@ export default function AdminReportsPage() {
 
   return (
     <div>
-      <PageHeader title="Reports 🚨" subtitle="Member safety queue." />
+      <PageHeader title="Reports" subtitle="Member safety queue." />
       {loading ? (
         <Skeleton className="h-64" />
       ) : reports.length === 0 ? (
-        <EmptyState icon="🛡️" title="No reports" body="The community is safe and sound." />
+        <EmptyState icon={ShieldCheck} title="No reports" body="The community is safe and sound." />
       ) : (
         <div className="space-y-3">
           {reports.map((r) => (

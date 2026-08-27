@@ -3,10 +3,22 @@
 import { use, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ChevronLeft,
+  MoreVertical,
+  User,
+  HeartCrack,
+  Camera,
+  Send,
+  Check,
+  CheckCheck,
+  Trash2,
+  Ban,
+} from 'lucide-react';
 import { api, errMessage, mediaUrl } from '@/lib/api';
 import { useAuth } from '@/lib/store';
 import { useSocket } from '@/lib/socket';
-import { Avatar, Button, EmptyState, VerifiedBadge } from '@/components/ui';
+import { EmptyState, VerifiedBadge } from '@/components/ui';
 import type { ChatMessage, Conversation, ProfileCard } from '@/lib/types';
 
 export default function ChatRoom({ params }: { params: Promise<{ id: string }> }) {
@@ -190,62 +202,88 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
   if (error && !other) {
     return (
       <div className="pt-14 lg:pt-0">
-        <EmptyState icon="🚫" title={error} />
+        <EmptyState icon={Ban} title={error} />
       </div>
     );
   }
 
   return (
-    <div className="pt-14 lg:pt-0 h-[calc(100vh-5rem)] lg:h-[calc(100vh-6rem)] flex flex-col max-w-3xl mx-auto">
+    <div className="pt-14 lg:pt-0 h-[calc(100vh-6rem)] lg:h-[calc(100vh-7rem)] flex flex-col max-w-3xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-        <button onClick={() => router.push('/app/messages')} className="text-2xl lg:hidden">
-          ‹
+        <button
+          onClick={() => router.push('/app/messages')}
+          className="w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center text-white/70 lg:hidden"
+          aria-label="Back"
+        >
+          <ChevronLeft size={22} />
         </button>
-        <Avatar src={other?.mainPhotoUrl} name={other?.name ?? '?'} size={44} />
-        <div className="flex-1">
-          <div className="font-semibold flex items-center gap-1.5">
-            {other?.name ?? '…'}
-            {other?.isVerified && <VerifiedBadge className="w-4 h-4 text-[9px]" />}
-          </div>
-          <div className="text-xs">
-            {connected ? (
-              typing ? (
-                <span className="text-rose-300">typing…</span>
-              ) : (
-                <span className="text-emerald-400">● online</span>
-              )
+        <button
+          onClick={() => other && router.push(`/app/discover?u=${other.userId}`)}
+          className="flex items-center gap-3 flex-1 min-w-0 text-left"
+        >
+          <span className="relative shrink-0">
+            {other?.mainPhotoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={mediaUrl(other.mainPhotoUrl)}
+                alt={other.name}
+                className="w-11 h-11 rounded-full object-cover"
+              />
             ) : (
-              <span className="text-white/40">connecting…</span>
+              <span className="w-11 h-11 rounded-full bg-brand-gradient flex items-center justify-center text-white font-bold">
+                {(other?.name ?? '?').split(' ').map((p) => p[0]).slice(0, 2).join('')}
+              </span>
             )}
-          </div>
-        </div>
+            {connected && !typing && (
+              <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-ink-900" />
+            )}
+          </span>
+          <span className="min-w-0">
+            <span className="font-semibold flex items-center gap-1.5 text-[15px]">
+              {other?.name ?? '…'}
+              {other?.isVerified && <VerifiedBadge className="w-4 h-4" />}
+            </span>
+            <span className="text-xs block">
+              {connected ? (
+                typing ? (
+                  <span className="text-rose-300">typing…</span>
+                ) : (
+                  <span className="text-emerald-400">Online</span>
+                )
+              ) : (
+                <span className="text-white/40">connecting…</span>
+              )}
+            </span>
+          </span>
+        </button>
         <div className="relative">
           <button
             onClick={() => setShowMenu((s) => !s)}
-            className="w-10 h-10 rounded-full hover:bg-white/10 text-xl"
+            className="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-white/70"
+            aria-label="Conversation options"
           >
-            ⋯
+            <MoreVertical size={20} />
           </button>
           {showMenu && (
-            <div className="absolute right-0 top-12 glass-strong rounded-2xl p-2 w-44 z-20">
+            <div className="absolute right-0 top-12 glass-strong rounded-2xl p-2 w-44 z-20 border border-white/10">
               <button
                 onClick={() => {
                   setShowMenu(false);
                   if (other) router.push(`/app/discover?u=${other.userId}`);
                 }}
-                className="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-sm"
+                className="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-sm inline-flex items-center gap-2"
               >
-                👤 View profile
+                <User size={15} /> View profile
               </button>
               <button
                 onClick={() => {
                   setShowMenu(false);
                   unmatch();
                 }}
-                className="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-sm text-red-400"
+                className="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-sm text-red-400 inline-flex items-center gap-2"
               >
-                💔 Unmatch
+                <HeartCrack size={15} /> Unmatch
               </button>
             </div>
           )}
@@ -256,7 +294,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
       <div className="flex-1 overflow-y-auto py-5 space-y-3 px-1">
         {messages.length === 0 && (
           <div className="text-center text-white/40 text-sm mt-10">
-            You matched! Say hello 👋
+            You matched — say hello!
           </div>
         )}
         <AnimatePresence initial={false}>
@@ -270,11 +308,11 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
                 className={`flex ${mine ? 'justify-end' : 'justify-start'} group`}
               >
                 <div
-                  className={`max-w-[75%] rounded-3xl px-4 py-2.5 ${
+                  className={`relative max-w-[75%] rounded-[22px] px-4 py-2.5 text-[15px] leading-relaxed ${
                     mine
                       ? 'bg-brand-gradient text-white rounded-br-md shadow-glow'
-                      : 'glass rounded-bl-md'
-                  } ${m.type === 'deleted' ? 'italic text-white/40' : ''}`}
+                      : 'bg-white text-ink-900 rounded-bl-md shadow-card'
+                  } ${m.type === 'deleted' ? 'italic opacity-50' : ''}`}
                 >
                   {m.type === 'deleted' ? (
                     'Message deleted'
@@ -296,23 +334,26 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
                       {m.body && <div className="whitespace-pre-wrap break-words">{m.body}</div>}
                       <div
                         className={`text-[10px] mt-1 flex items-center gap-1 justify-end ${
-                          mine ? 'text-white/70' : 'text-white/40'
+                          mine ? 'text-white/75' : 'text-ink-900/40'
                         }`}
                       >
                         {new Date(m.createdAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
-                        {mine && (
-                          <span>{m.status === 'read' ? '✓✓' : m.status === 'delivered' ? '✓✓' : '✓'}</span>
-                        )}
+                        {mine &&
+                          (m.status === 'read' ? (
+                            <CheckCheck size={13} className="text-white" />
+                          ) : (
+                            <Check size={13} />
+                          ))}
                         {mine && (
                           <button
                             onClick={() => deleteMessage(m.id)}
-                            className="opacity-0 group-hover:opacity-60 hover:opacity-100 ml-1"
+                            className="opacity-0 group-hover:opacity-70 hover:opacity-100 ml-0.5"
                             title="Delete"
                           >
-                            🗑
+                            <Trash2 size={12} />
                           </button>
                         )}
                       </div>
@@ -344,14 +385,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
       )}
 
       {/* Composer */}
-      <div className="flex items-end gap-2 pt-3 border-t border-white/10">
-        <label className="btn-ghost !p-3 !rounded-full cursor-pointer shrink-0">
-          📷
+      <div className="flex items-center gap-2 pt-3">
+        <label className="w-11 h-11 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-white/70 hover:bg-white/10 cursor-pointer shrink-0 transition">
+          <Camera size={20} />
           <input type="file" accept="image/*" className="hidden" onChange={sendImage} />
         </label>
         <textarea
           rows={1}
-          className="input !rounded-3xl max-h-32 resize-none"
+          className="input !rounded-full !bg-white/5 border-white/10 max-h-32 resize-none flex-1"
           placeholder="Type a message…"
           value={text}
           onChange={(e) => onType(e.target.value)}
@@ -362,13 +403,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> }
             }
           }}
         />
-        <Button
+        <button
           onClick={() => send()}
-          disabled={sending || (!text.trim() && true)}
-          className="shrink-0 !rounded-full !w-12 !h-12 !p-0"
+          disabled={sending || !text.trim()}
+          className="shrink-0 w-12 h-12 rounded-full bg-brand-gradient text-white flex items-center justify-center shadow-glow active:scale-90 transition disabled:opacity-40"
+          aria-label="Send"
         >
-          ➤
-        </Button>
+          <Send size={20} className="ml-0.5" />
+        </button>
       </div>
     </div>
   );
