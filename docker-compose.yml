@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: kokoro_march
+      MYSQL_USER: kokoro
+      MYSQL_PASSWORD: kokoro
+    ports:
+      - "3306:3306"
+    volumes:
+      - kokoro_mysql:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  kokoro_mysql:
