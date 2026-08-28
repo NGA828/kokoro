@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(139, 77, 255, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(255, 61, 143, 0.12), transparent 60%),
+    #0a0710;
+  color: #f5f1fa;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+/* Thin, elegant scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 61, 143, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 61, 143, 0.55);
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-card;
+  }
+  .glass-strong {
+    @apply bg-ink-850/80 backdrop-blur-2xl border border-white/10 shadow-card;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed select-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand-gradient text-white px-6 py-3 shadow-glow hover:shadow-glow-violet hover:scale-[1.02] active:scale-95;
+  }
+  .btn-ghost {
+    @apply btn bg-white/5 border border-white/10 text-white px-6 py-3 hover:bg-white/10 active:scale-95;
+  }
+  .btn-white {
+    @apply btn bg-white text-ink-900 px-6 py-3 hover:bg-white/90 active:scale-95;
+  }
+  .input {
+    @apply w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-rose-500/60 focus:bg-white/[0.07] focus:ring-2 focus:ring-rose-500/20;
+  }
+  .label {
+    @apply block text-sm font-medium text-white/70 mb-1.5;
+  }
+  .card {
+    @apply glass rounded-3xl;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border;
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Hide scrollbar utility for chip rails */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Match modal hearts */
+.heart-float {
+  animation: heartFloat 3s ease-in-out infinite;
+}
+@keyframes heartFloat {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-18px) rotate(6deg); }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ff6fae 0%, #c92bb0 45%, #a875ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
