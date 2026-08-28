@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useEffect, useMemo, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 export type MascotReaction = 'idle' | 'wave' | 'love' | 'happy';
@@ -243,6 +243,25 @@ function Figure({
   );
 }
 
+/**
+ * Performance: with frameloop="demand" the GPU is idle when nothing happens.
+ * We invalidate once per frame ONLY while a reaction is playing (~3s), so a
+ * tap animates the character but normal app usage costs ~0 WebGL frames.
+ */
+function ReactionDriver({ reaction }: { reaction: MascotReaction }) {
+  const { invalidate } = useThree();
+  const active = reaction !== 'idle';
+  useFrame(() => {
+    if (active) invalidate();
+  });
+  // one render when returning to idle so the character settles at rest pose
+  useEffect(() => {
+    if (!active) invalidate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
+  return null;
+}
+
 export default function MascotScene({
   reaction,
   burstId,
@@ -252,14 +271,21 @@ export default function MascotScene({
 }) {
   return (
     <Canvas
+      frameloop="demand"
+      dpr={[1, 1.75]}
       camera={{ position: [0, 0, 4.2], fov: 38 }}
-      gl={{ alpha: true, antialias: true }}
+      gl={{
+        alpha: true,
+        antialias: true,
+        powerPreference: 'low-power',
+      }}
       style={{ background: 'transparent' }}
     >
       <ambientLight intensity={0.9} />
       <directionalLight position={[3, 5, 4]} intensity={1.15} />
       <directionalLight position={[-4, 2, -2]} intensity={0.35} color="#ff9ec6" />
       <pointLight position={[0, -2, 2]} intensity={0.4} color="#8b4dff" />
+      <ReactionDriver reaction={reaction} />
       <Figure reaction={reaction} burstId={burstId} />
     </Canvas>
   );

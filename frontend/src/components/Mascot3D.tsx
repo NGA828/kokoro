@@ -155,7 +155,7 @@ export function Mascot3D() {
                 'radial-gradient(ellipse, rgba(139,77,255,0.55), transparent 70%)',
             }}
           />
-          <span className="absolute inset-0 transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
+          <span className="absolute inset-0 animate-float-slow transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
             <MascotBoundary fallback={<MascotFallback />}>
               <MascotScene reaction={reaction} burstId={burstId} />
             </MascotBoundary>

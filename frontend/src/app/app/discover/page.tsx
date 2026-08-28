@@ -135,8 +135,22 @@ export default function DiscoverPage() {
           `/likes/${userId}?type=${type}`,
         );
         setCards((prev) => prev.filter((c) => c.userId !== userId));
-        const q = await api.get('/likes/quota');
-        setQuota(q.data);
+        // optimistic quota update (no extra round-trip; refetched on next load)
+        setQuota((q) =>
+          q
+            ? {
+                ...q,
+                likesRemaining:
+                  type === 'like'
+                    ? Math.max(0, q.likesRemaining - 1)
+                    : q.likesRemaining,
+                superRemaining:
+                  type === 'superlike'
+                    ? Math.max(0, q.superRemaining - 1)
+                    : q.superRemaining,
+              }
+            : q,
+        );
         if (data.matched) {
           setMatch({
             ...data,

@@ -174,16 +174,25 @@ export default function OnboardingPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="label">I am</label>
-                      <select
-                        className="input [color-scheme:dark]"
-                        value={form.gender}
-                        onChange={(e) => set('gender', e.target.value)}
-                      >
-                        <option value="">Select…</option>
-                        <option value="female">Woman</option>
-                        <option value="male">Man</option>
-                        <option value="other">Other</option>
-                      </select>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { v: 'female', l: 'Woman' },
+                          { v: 'male', l: 'Man' },
+                        ].map((o) => (
+                          <button
+                            key={o.v}
+                            type="button"
+                            onClick={() => set('gender', o.v)}
+                            className={`rounded-2xl py-3 font-semibold border transition-all duration-150 active:scale-95 ${
+                              form.gender === o.v
+                                ? 'bg-brand-gradient text-white border-transparent shadow-glow'
+                                : 'bg-white/[0.06] border-white/15 text-white/70 hover:border-rose-400/50 hover:text-white'
+                            }`}
+                          >
+                            {o.l}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div>
                       <label className="label">Birthday</label>
